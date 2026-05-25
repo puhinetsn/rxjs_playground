@@ -1,0 +1,13 @@
+@use './variables';
+
+.icon-btn {
+  height: 40px;
+  width: 40px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.active   { background-color: var(--color-elements); color: var(--color-btn-icon); }
+  &.inactive { background-color: transparent;           color: var(--color-muted); }
+}
