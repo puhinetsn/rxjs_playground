@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'bootstrap/scss/bootstrap' as *;
+@use '@angular/material' as mat;
+@use './styles/variables';
+@use './styles/typography';
+@use './styles/components';
+@use './styles/icons';
+@use './styles/borders';
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: dark;
+  background-color: var(--color-bg);
+  margin: 0;
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-code);
+  color: var(--color-text-secondary);
+}
+
+p {
+  font-family: var(--font-ui);
+  color: var(--color-text-primary);
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+.elements-bcg {
+  background-color: var(--color-elements-bg);
+}
+
+
+
+

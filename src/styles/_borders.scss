@@ -1,0 +1,11 @@
+@use './variables';
+
+.border-box {
+  border: 1px solid var(--color-inactive);
+  border-radius: 15px;
+}
+
+.border-line-b {
+  border-bottom: 1px solid var(--color-inactive);
+}
+
