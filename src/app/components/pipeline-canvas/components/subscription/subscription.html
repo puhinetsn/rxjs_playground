@@ -1,0 +1,31 @@
+<div class="d-flex container flex-column gap-3">
+  <div class="d-flex justify-content-between">
+    <p>{{ subscription().name }}</p>
+    <mat-icon class="delete" (click)="deleteSubsc()"> delete </mat-icon>
+  </div>
+  <div class="p-4 d-flex flex-column align-items-center gap-5">
+    <div class="d-flex width-content no-hover flex-grow-0 p-3 border-box align-items-center gap-2">
+      <div class="icon-btn inactive">
+        <mat-icon class="material-symbols-outlined icon-lg"> sensors </mat-icon>
+      </div>
+      <div class="d-flex flex-column gap-2">
+        <p>Observable</p>
+        <h6>source$</h6>
+      </div>
+    </div>
+
+    <div class="border-box-dashed p-2 w-100 d-flex justify-content-center">
+      <p>+ .pipe()</p>
+    </div>
+
+    <div class="d-flex width-content no-hover p-3 border-box align-items-center gap-2">
+      <div class="icon-btn inactive">
+        <mat-icon class="material-symbols-outlined icon-lg"> monitor </mat-icon>
+      </div>
+      <div class="d-flex flex-column gap-2">
+        <p>subscriber</p>
+        <h6>output$</h6>
+      </div>
+    </div>
+  </div>
+</div>

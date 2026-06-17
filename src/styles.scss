@@ -29,12 +29,16 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-code);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+}
+
+.mat-icon {
+ color: var(--color-text-secondary);
 }
 
 p {
   font-family: var(--font-ui);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -45,6 +49,9 @@ h1, h2, h3, h4, h5, h6, p {
   background-color: var(--color-elements-bg);
 }
 
+.width-content {
+  width: fit-content;
+}
 
 
 

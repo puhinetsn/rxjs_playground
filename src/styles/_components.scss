@@ -9,5 +9,5 @@
   justify-content: center;
 
   &.active   { background-color: var(--color-elements); color: var(--color-btn-icon); }
-  &.inactive { background-color: transparent;           color: var(--color-muted); }
+  &.inactive { background-color: var(--color-inactive);          color: var(--color-muted); }
 }

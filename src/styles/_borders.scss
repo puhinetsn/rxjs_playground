@@ -1,11 +1,17 @@
-@use './variables';
-
-.border-box {
+.border-box,
+.border-box-dashed {
   border: 1px solid var(--color-inactive);
   border-radius: 15px;
+
+  &:not(.no-hover):hover {
+    border-color: var(--color-elements);
+  }
+}
+
+.border-box-dashed {
+  border-style: dashed;
 }
 
 .border-line-b {
   border-bottom: 1px solid var(--color-inactive);
 }
-
