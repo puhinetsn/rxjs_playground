@@ -295,6 +295,5 @@ export const OPERATORS_BY_TYPE: Record<OperatorTypes, OperatorInfo[]> = {
   [OperatorTypes.Multicasting]: MULTICASTING,
   [OperatorTypes.Utility]: UTILITY,
   [OperatorTypes.ConditionalAndBoolean]: CONDITIONAL_AND_BOOLEAN,
-
   [OperatorTypes.MathematicalAndAggregate]: MATHEMATICAL_AND_AGGREGATE,
 };

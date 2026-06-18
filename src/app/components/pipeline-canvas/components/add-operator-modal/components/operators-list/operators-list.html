@@ -1,0 +1,10 @@
+<p class="fs-5">{{ operatorsType() }}</p>
+
+<div class="operators-list my-3">
+  @for (operator of operatorsList(); track $index) {
+    <div class="border-box p-2 elements-bcg">
+      <h6>.{{ operator.name }}()</h6>
+      <p>{{ operator.description }}</p>
+    </div>
+  }
+</div>
