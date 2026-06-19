@@ -5,3 +5,9 @@
 .delete:hover {
   color: red;
 }
+
+.background-line {
+  width: 1px;
+  background-color: var(--color-inactive);
+  height: 48px;
+}
