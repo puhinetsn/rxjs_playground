@@ -16,11 +16,7 @@ export class Subscription {
   dialog = inject(MatDialog);
 
   openDialog() {
-    const dialogRef = this.dialog.open(AddOperatorModal);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(AddOperatorModal);
   }
 
   deleteSubsc() {
