@@ -6,11 +6,15 @@
   </div>
 
   <form [formGroup]="form">
-    <div>
-      @if (dataValueOptions()) {
-        <app-value-options [operatorName]="data.operatorData.name" [form]="form" />
-      }
-    </div>
+    @if (dataValueOptions()) {
+      <app-value-options [operatorName]="data.operatorData.name" [form]="form" />
+    } @else if (dataComparisonOptions()) {
+      <app-comparison-options [operatorName]="data.operatorData.name" [form]="form" />
+    } @else if (dataAccumulatorOptions()) {
+      <app-accumulator-options [operatorName]="data.operatorData.name" [form]="form" />
+    } @else if (dataHigherOrderOptions()) {
+      <app-higher-order-options [operatorName]="data.operatorData.name" [form]="form" />
+    }
 
     <mat-dialog-actions align="end">
       <button type="button" matButton mat-dialog-close>Back</button>

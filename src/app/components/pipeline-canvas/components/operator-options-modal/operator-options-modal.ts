@@ -13,10 +13,22 @@ import { ValueOptions } from './components/value-options/value-options';
 import { MatButtonModule } from '@angular/material/button';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OperatorOptions } from '../../../../engine/models/operator.model';
+import { ComparisonOptions } from './components/comparison-options/comparison-options';
+import { AccumulatorOptions } from './components/accumulator-options/accumulator-options';
+import { HigherOrderOptions } from './components/higher-order-options/higher-order-options';
 
 @Component({
   selector: 'app-operator-options-modal',
-  imports: [MatDialogModule, FormsModule, ReactiveFormsModule, ValueOptions, MatButtonModule],
+  imports: [
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ValueOptions,
+    MatButtonModule,
+    ComparisonOptions,
+    AccumulatorOptions,
+    HigherOrderOptions,
+  ],
   templateUrl: './operator-options-modal.html',
   styleUrl: './operator-options-modal.scss',
 })

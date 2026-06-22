@@ -1,6 +1,9 @@
-<mat-form-field class="w-100">
-  <input type="number" matInput [formControl]="valueControl" />
-</mat-form-field>
-@if (valueControl.invalid) {
-  <mat-error>Enter valid value</mat-error>
-}
+<div class="d-flex flex-column gap-1">
+  <p>Value</p>
+  <mat-form-field class="w-100">
+    <input type="number" matInput [formControl]="valueControl" />
+  </mat-form-field>
+  @if (valueControl.invalid) {
+    <mat-error>Enter valid value</mat-error>
+  }
+</div>
