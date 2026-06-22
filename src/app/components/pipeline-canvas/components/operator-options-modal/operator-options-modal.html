@@ -1,11 +1,13 @@
 <h5 mat-dialog-title>Add .{{ data.operatorData.name }}() Operator</h5>
 
 <mat-dialog-content>
-  <p>{{ data.operatorData.description }}</p>
+  <div class="p-3 border-box no-hover elements-bcg">
+    <p>{{ data.operatorData.description }}</p>
+  </div>
 
   <div>
     @if (dataValueOptions()) {
-      <p>data value option worked</p>
+      <app-value-options [operatorName]="data.operatorData.name" />
     }
   </div>
 </mat-dialog-content>

@@ -27,13 +27,18 @@ body {
   height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-code);
   color: var(--color-text-primary);
 }
 
 .mat-icon {
- color: var(--color-text-secondary);
+  color: var(--color-text-secondary);
 }
 
 p {
@@ -41,7 +46,13 @@ p {
   color: var(--color-text-secondary);
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
 }
 
@@ -52,6 +63,3 @@ h1, h2, h3, h4, h5, h6, p {
 .width-content {
   width: fit-content;
 }
-
-
-

@@ -9,10 +9,11 @@ import {
   OPERATORS_WITH_NOTIFIER_OPTIONS,
   OPERATORS_WITH_VALUE_OPTIONS,
 } from '../../../../data/default-values';
+import { ValueOptions } from './components/value-options/value-options';
 
 @Component({
   selector: 'app-operator-options-modal',
-  imports: [MatDialogModule],
+  imports: [MatDialogModule, ValueOptions],
   templateUrl: './operator-options-modal.html',
   styleUrl: './operator-options-modal.scss',
 })
