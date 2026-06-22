@@ -92,3 +92,81 @@ export const OPERATOR_DEFAULTS: Record<OperatorName, OperatorOptions> = {
   [OperatorName.Min]: {},
   [OperatorName.Max]: {},
 };
+
+export const OPERATORS_WITH_VALUE_OPTIONS: OperatorName[] = [
+  OperatorName.Delay,
+  OperatorName.Take,
+  OperatorName.TakeLast,
+  OperatorName.Skip,
+  OperatorName.SkipLast,
+  OperatorName.ElementAt,
+  OperatorName.BufferCount,
+  OperatorName.WindowCount,
+  OperatorName.Retry,
+  OperatorName.BufferTime,
+  OperatorName.WindowTime,
+  OperatorName.DebounceTime,
+  OperatorName.ThrottleTime,
+  OperatorName.AuditTime,
+  OperatorName.SampleTime,
+  OperatorName.MapTo,
+  OperatorName.StartWith,
+  OperatorName.DefaultIfEmpty,
+];
+
+export const OPERATORS_WITH_COMPARISON_OPTIONS: OperatorName[] = [
+  OperatorName.Filter,
+  OperatorName.TakeWhile,
+  OperatorName.SkipWhile,
+  OperatorName.Every,
+  OperatorName.Find,
+  OperatorName.FindIndex,
+];
+
+export const OPERATORS_WITH_ACCUMULATOR_OPTIONS: OperatorName[] = [
+  OperatorName.Map,
+  OperatorName.Scan,
+  OperatorName.SwitchScan,
+  OperatorName.MergeScan,
+  OperatorName.Reduce,
+];
+
+export const OPERATORS_WITH_HIGHER_ORDER_OPTIONS: OperatorName[] = [
+  OperatorName.MergeMap,
+  OperatorName.SwitchMap,
+  OperatorName.ConcatMap,
+  OperatorName.ExhaustMap,
+];
+
+export const OPERATORS_WITH_NOTIFIER_OPTIONS: OperatorName[] = [
+  OperatorName.Buffer,
+  OperatorName.Window,
+  OperatorName.TakeUntil,
+  OperatorName.SkipUntil,
+  OperatorName.WithLatestFrom,
+  OperatorName.SequenceEqual,
+];
+
+export const OPERATORS_WITH_NO_OPTIONS: OperatorName[] = [
+  OperatorName.Pairwise,
+  OperatorName.First,
+  OperatorName.Last,
+  OperatorName.Distinct,
+  OperatorName.DistinctUntilChanged,
+  OperatorName.IgnoreElements,
+  OperatorName.MergeAll,
+  OperatorName.ConcatAll,
+  OperatorName.SwitchAll,
+  OperatorName.ExhaustAll,
+  OperatorName.CombineLatestAll,
+  OperatorName.Share,
+  OperatorName.Timestamp,
+  OperatorName.TimeInterval,
+  OperatorName.Materialize,
+  OperatorName.Dematerialize,
+  OperatorName.ToArray,
+  OperatorName.IsEmpty,
+  OperatorName.Count,
+  OperatorName.Min,
+  OperatorName.Max,
+];

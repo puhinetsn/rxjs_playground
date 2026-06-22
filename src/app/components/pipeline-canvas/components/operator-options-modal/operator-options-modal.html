@@ -2,4 +2,10 @@
 
 <mat-dialog-content>
   <p>{{ data.operatorData.description }}</p>
+
+  <div>
+    @if (dataValueOptions()) {
+      <p>data value option worked</p>
+    }
+  </div>
 </mat-dialog-content>
