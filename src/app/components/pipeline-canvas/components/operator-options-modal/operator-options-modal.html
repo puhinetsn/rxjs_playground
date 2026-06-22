@@ -1,11 +1,24 @@
 <h5 mat-dialog-title>Add .{{ data.operatorData.name }}() Operator</h5>
 
-<mat-dialog-content>
-  <p>{{ data.operatorData.description }}</p>
-
-  <div>
-    @if (dataValueOptions()) {
-      <p>data value option worked</p>
-    }
+<mat-dialog-content class="d-flex gap-3 flex-column">
+  <div class="p-3 border-box no-hover elements-bcg">
+    <p>{{ data.operatorData.description }}</p>
   </div>
+
+  <form [formGroup]="form">
+    @if (dataValueOptions()) {
+      <app-value-options [operatorName]="data.operatorData.name" [form]="form" />
+    } @else if (dataComparisonOptions()) {
+      <app-comparison-options [operatorName]="data.operatorData.name" [form]="form" />
+    } @else if (dataAccumulatorOptions()) {
+      <app-accumulator-options [operatorName]="data.operatorData.name" [form]="form" />
+    } @else if (dataHigherOrderOptions()) {
+      <app-higher-order-options [operatorName]="data.operatorData.name" [form]="form" />
+    }
+
+    <mat-dialog-actions align="end">
+      <button type="button" matButton mat-dialog-close>Back</button>
+      <button type="submit" matButton cdkFocusInitial (click)="submitPipe()">Add To Pipe</button>
+    </mat-dialog-actions>
+  </form>
 </mat-dialog-content>

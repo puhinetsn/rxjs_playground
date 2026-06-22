@@ -1,0 +1,21 @@
+<div class="d-flex gap-3 flex-column">
+  <div class="d-flex flex-column gap-1">
+    <p>Inner Count</p>
+    <mat-form-field class="w-100">
+      <input type="number" matInput [formControl]="innerCountControl" />
+    </mat-form-field>
+    @if (innerCountControl.invalid) {
+      <mat-error>Enter valid value</mat-error>
+    }
+  </div>
+
+  <div class="d-flex flex-column gap-1">
+    <p>Interval (Ms)</p>
+    <mat-form-field class="w-100">
+      <input type="number" matInput [formControl]="intervalMsControl" />
+    </mat-form-field>
+    @if (intervalMsControl.invalid) {
+      <mat-error>Enter valid value</mat-error>
+    }
+  </div>
+</div>

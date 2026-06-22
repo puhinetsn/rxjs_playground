@@ -1,9 +1,9 @@
 import { Component, computed, input, OnInit } from '@angular/core';
-import { OPERATOR_DEFAULTS } from '../../../../../../data/default-values';
 import { OperatorName } from '../../../../../../data/operators';
+import { OPERATOR_DEFAULTS } from '../../../../../../data/default-values';
 import {
-  OperatorOptions,
-  ValueOperatorOptions,
+  ComparisonOperatorOptions,
+  ComparisonOperators,
 } from '../../../../../../engine/models/operator.model';
 import {
   FormControl,
@@ -14,17 +14,18 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-value-options',
-  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule],
-  templateUrl: './value-options.html',
-  styleUrl: './value-options.scss',
+  selector: 'app-comparison-options',
+  imports: [FormsModule, ReactiveFormsModule, MatSelectModule, MatFormFieldModule, MatInputModule],
+  templateUrl: './comparison-options.html',
+  styleUrl: './comparison-options.scss',
 })
-export class ValueOptions implements OnInit {
+export class ComparisonOptions implements OnInit {
   operatorName = input.required<OperatorName>();
   operatorDefaultValues = computed(
-    () => OPERATOR_DEFAULTS[this.operatorName()] as ValueOperatorOptions,
+    () => OPERATOR_DEFAULTS[this.operatorName()] as ComparisonOperatorOptions,
   );
 
   form = input.required<FormGroup>();
@@ -33,10 +34,21 @@ export class ValueOptions implements OnInit {
     return this.form().get('value') as FormControl;
   }
 
+  get operatorControl(): FormControl {
+    return this.form().get('operator') as FormControl;
+  }
+
+  options = Object.values(ComparisonOperators);
+
   ngOnInit() {
     this.form().addControl(
       'value',
       new FormControl(this.operatorDefaultValues().value, [Validators.required]),
+    );
+
+    this.form().addControl(
+      'operator',
+      new FormControl(this.operatorDefaultValues().operator, [Validators.required]),
     );
   }
 }

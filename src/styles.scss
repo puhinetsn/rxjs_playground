@@ -18,6 +18,12 @@ html {
       density: 0,
     )
   );
+  --mat-sys-primary: #00e1ff;
+  --mat-sys-on-primary: #000000;
+  --mat-sys-primary-container: #003f47;
+  --mat-sys-on-primary-container: #00e1ff;
+  --mat-sys-tertiary: #00e1ff;
+  --mat-sys-on-tertiary: #000000;
 }
 
 body {
@@ -27,13 +33,18 @@ body {
   height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-code);
   color: var(--color-text-primary);
 }
 
 .mat-icon {
- color: var(--color-text-secondary);
+  color: var(--color-text-secondary);
 }
 
 p {
@@ -41,7 +52,13 @@ p {
   color: var(--color-text-secondary);
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
 }
 
@@ -53,5 +70,17 @@ h1, h2, h3, h4, h5, h6, p {
   width: fit-content;
 }
 
+.disabled {
+  opacity: 50%;
+}
 
-
+.mat-mdc-form-field {
+  --mat-form-field-outlined-focus-outline-color: var(--color-elements);
+  --mat-form-field-outlined-hover-outline-color: var(--color-elements);
+  --mat-sys-outline: var(--color-elements);
+  --mat-form-field-outlined-container-shape: 15px;
+  .mdc-text-field--outlined {
+    background-color: var(--color-elements-bg);
+    border-radius: 15px;
+  }
+}

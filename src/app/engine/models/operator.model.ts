@@ -3,6 +3,7 @@ export interface Operator {
   description: string;
   options: OperatorOptions;
   type: OperatorTypes;
+  disabled: boolean;
 }
 
 export interface OperatorOptions {}

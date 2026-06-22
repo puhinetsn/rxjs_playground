@@ -8,6 +8,12 @@
   align-items: center;
   justify-content: center;
 
-  &.active   { background-color: var(--color-elements); color: var(--color-btn-icon); }
-  &.inactive { background-color: var(--color-inactive);          color: var(--color-muted); }
+  &.active {
+    background-color: var(--color-elements);
+    color: var(--color-btn-icon);
+  }
+  &.inactive {
+    background-color: var(--color-inactive);
+    color: var(--color-muted);
+  }
 }
