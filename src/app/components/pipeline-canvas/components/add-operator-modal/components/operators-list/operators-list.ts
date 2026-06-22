@@ -3,10 +3,11 @@ import { OperatorTypes } from '../../../../../../engine/models/operator.model';
 import { OperatorInfo, OPERATORS_BY_TYPE } from '../../../../../../data/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { OperatorOptionsModal } from '../../../operator-options-modal/operator-options-modal';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-operators-list',
-  imports: [],
+  imports: [NgClass],
   templateUrl: './operators-list.html',
   styleUrl: './operators-list.scss',
 })

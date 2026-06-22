@@ -70,6 +70,10 @@ p {
   width: fit-content;
 }
 
+.disabled {
+  opacity: 50%;
+}
+
 .mat-mdc-form-field {
   --mat-form-field-outlined-focus-outline-color: var(--color-elements);
   --mat-form-field-outlined-hover-outline-color: var(--color-elements);

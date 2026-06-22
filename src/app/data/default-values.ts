@@ -63,12 +63,12 @@ export const OPERATOR_DEFAULTS: Record<OperatorName, OperatorOptions> = {
   [OperatorName.ConcatMap]: higherOrder(3, 500),
   [OperatorName.ExhaustMap]: higherOrder(3, 500),
 
-  [OperatorName.Buffer]: notifier(''),
-  [OperatorName.Window]: notifier(''),
-  [OperatorName.TakeUntil]: notifier(''),
-  [OperatorName.SkipUntil]: notifier(''),
-  [OperatorName.WithLatestFrom]: notifier(''),
-  [OperatorName.SequenceEqual]: notifier(''),
+  [OperatorName.Buffer]: {},
+  [OperatorName.Window]: {},
+  [OperatorName.TakeUntil]: {},
+  [OperatorName.SkipUntil]: {},
+  [OperatorName.WithLatestFrom]: {},
+  [OperatorName.SequenceEqual]: {},
 
   [OperatorName.Pairwise]: {},
   [OperatorName.First]: {},
