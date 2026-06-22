@@ -1,7 +1,10 @@
 import { Component, computed, input, OnInit } from '@angular/core';
 import { OPERATOR_DEFAULTS } from '../../../../../../data/default-values';
 import { OperatorName } from '../../../../../../data/operators';
-import { ValueOperatorOptions } from '../../../../../../engine/models/operator.model';
+import {
+  OperatorOptions,
+  ValueOperatorOptions,
+} from '../../../../../../engine/models/operator.model';
 import {
   FormControl,
   FormGroup,
@@ -24,11 +27,16 @@ export class ValueOptions implements OnInit {
     () => OPERATOR_DEFAULTS[this.operatorName()] as ValueOperatorOptions,
   );
 
-  form!: FormGroup;
+  form = input.required<FormGroup>();
+
+  get valueControl(): FormControl {
+    return this.form().get('value') as FormControl;
+  }
 
   ngOnInit() {
-    this.form = new FormGroup({
-      value: new FormControl(this.operatorDefaultValues().value, [Validators.required]),
-    });
+    this.form().addControl(
+      'value',
+      new FormControl(this.operatorDefaultValues().value, [Validators.required]),
+    );
   }
 }

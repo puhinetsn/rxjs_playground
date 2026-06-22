@@ -1,13 +1,20 @@
 <h5 mat-dialog-title>Add .{{ data.operatorData.name }}() Operator</h5>
 
-<mat-dialog-content>
+<mat-dialog-content class="d-flex gap-3 flex-column">
   <div class="p-3 border-box no-hover elements-bcg">
     <p>{{ data.operatorData.description }}</p>
   </div>
 
-  <div>
-    @if (dataValueOptions()) {
-      <app-value-options [operatorName]="data.operatorData.name" />
-    }
-  </div>
+  <form [formGroup]="form">
+    <div>
+      @if (dataValueOptions()) {
+        <app-value-options [operatorName]="data.operatorData.name" [form]="form" />
+      }
+    </div>
+
+    <mat-dialog-actions align="end">
+      <button type="button" matButton mat-dialog-close>Back</button>
+      <button type="submit" matButton cdkFocusInitial (click)="submitPipe()">Add To Pipe</button>
+    </mat-dialog-actions>
+  </form>
 </mat-dialog-content>
