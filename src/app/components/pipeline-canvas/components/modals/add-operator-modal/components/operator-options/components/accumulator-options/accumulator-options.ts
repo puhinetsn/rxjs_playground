@@ -1,10 +1,4 @@
 import { Component, computed, input, OnInit } from '@angular/core';
-import { OperatorName } from '../../../../../../data/operators';
-import { OPERATOR_DEFAULTS } from '../../../../../../data/default-values';
-import {
-  ComparisonOperatorOptions,
-  ComparisonOperators,
-} from '../../../../../../engine/models/operator.model';
 import {
   FormControl,
   FormGroup,
@@ -12,38 +6,44 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { OperatorName } from '../../../../../../../../../data/operators';
+import { OPERATOR_DEFAULTS } from '../../../../../../../../../data/default-values';
+import {
+  AccumulatorOperatorOptions,
+  NumericOperators,
+} from '../../../../../../../../../engine/models/operator.model';
 
 @Component({
-  selector: 'app-comparison-options',
+  selector: 'app-accumulator-options',
   imports: [FormsModule, ReactiveFormsModule, MatSelectModule, MatFormFieldModule, MatInputModule],
-  templateUrl: './comparison-options.html',
-  styleUrl: './comparison-options.scss',
+  templateUrl: './accumulator-options.html',
+  styleUrl: './accumulator-options.scss',
 })
-export class ComparisonOptions implements OnInit {
+export class AccumulatorOptions implements OnInit {
   operatorName = input.required<OperatorName>();
   operatorDefaultValues = computed(
-    () => OPERATOR_DEFAULTS[this.operatorName()] as ComparisonOperatorOptions,
+    () => OPERATOR_DEFAULTS[this.operatorName()] as AccumulatorOperatorOptions,
   );
 
   form = input.required<FormGroup>();
 
-  get valueControl(): FormControl {
-    return this.form().get('value') as FormControl;
+  options = Object.values(NumericOperators);
+
+  get seedControl(): FormControl {
+    return this.form().get('seed') as FormControl;
   }
 
   get operatorControl(): FormControl {
     return this.form().get('operator') as FormControl;
   }
 
-  options = Object.values(ComparisonOperators);
-
   ngOnInit() {
     this.form().addControl(
-      'value',
-      new FormControl(this.operatorDefaultValues().value, [Validators.required]),
+      'seed',
+      new FormControl(this.operatorDefaultValues().seed, [Validators.required]),
     );
 
     this.form().addControl(

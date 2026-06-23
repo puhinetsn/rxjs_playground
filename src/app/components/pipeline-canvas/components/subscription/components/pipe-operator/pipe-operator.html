@@ -1,0 +1,11 @@
+<div class="d-flex border-box no-hover elements-bcg flex-column operator-container gap-2 p-2">
+  <div
+    class="delete-icon elements-bcg border-box d-flex align-items-center justify-items-center"
+    (click)="removePipe()"
+  >
+    <mat-icon class="icon-sm"> close </mat-icon>
+  </div>
+
+  <h6>.{{ pipe().name }}()</h6>
+  <p>{{ pipe().options | json }}</p>
+</div>

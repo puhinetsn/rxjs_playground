@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   @for (operator of operatorTypes; track $index) {
-    <app-operators-list [operatorsType]="operator" />
+    <app-list-item [operatorsType]="operator" (operatorData)="setOperatorSelected($event)" />
   }
 </mat-dialog-content>
 

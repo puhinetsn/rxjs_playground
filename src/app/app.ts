@@ -1,11 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { Header } from './components/header/header';
 import { PipelineCanvas } from './components/pipeline-canvas/pipeline-canvas';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, PipelineCanvas],
+  imports: [Header, PipelineCanvas],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

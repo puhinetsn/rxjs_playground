@@ -1,0 +1,7 @@
+@let operatorValue = operator();
+
+@if (operatorValue) {
+  <app-operator-options [data]="operatorValue" />
+} @else {
+  <app-operators-list (operator)="setOperator($event)" />
+}
