@@ -1,0 +1,18 @@
+.delete-icon {
+  visibility: hidden;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 2px;
+  z-index: 1;
+}
+
+.operator-container {
+  position: relative;
+
+  &:hover {
+    .delete-icon {
+      visibility: visible;
+    }
+  }
+}

@@ -14,6 +14,10 @@
       </div>
     </div>
 
+    @for (pipe of subscriptionPipes(); track $index) {
+      <div class="background-line"></div>
+      <app-pipe-operator [pipe]="pipe" (removePipeOperator)="removeOperator($index)" />
+    }
     <div class="background-line"></div>
 
     <div class="border-box-dashed p-2 w-100 d-flex justify-content-center" (click)="openDialog()">

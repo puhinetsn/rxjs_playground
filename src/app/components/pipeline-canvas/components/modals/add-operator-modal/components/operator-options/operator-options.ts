@@ -38,7 +38,6 @@ export class OperatorOptionsModal {
   data = input.required<OperatorInfo>();
   operatorDefaultValues = computed(() => OPERATOR_DEFAULTS[this.data().name]);
   form = new FormGroup<OperatorOptions>({});
-  operatorCustomData = output<OperatorOptions>();
   dialogRef = inject(MatDialogRef);
 
   dataValueOptions = computed(() => OPERATORS_WITH_VALUE_OPTIONS.includes(this.data().name));
@@ -58,7 +57,6 @@ export class OperatorOptionsModal {
   dataNotifierOptions = computed(() => OPERATORS_WITH_NOTIFIER_OPTIONS.includes(this.data().name));
 
   submitPipe() {
-    this.operatorCustomData.emit(this.form.value);
-    this.dialogRef.close();
+    this.dialogRef.close({ name: this.data().name, options: this.form.value });
   }
 }

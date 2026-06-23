@@ -18,13 +18,5 @@ export class ListItem {
 
   selectOperator(operator: OperatorInfo) {
     this.operatorData.emit(operator);
-
-    // this.dialog.closeAll();
-    // const operatorOptionsModal = this.dialog.open(OperatorOptionsModal, {
-    //   data: { operatorData: operator },
-    // });
-    // operatorOptionsModal.afterClosed().subscribe((result) => {
-    //   console.log('operator data in operators list', result);
-    // });
   }
 }

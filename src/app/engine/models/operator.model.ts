@@ -1,9 +1,6 @@
 export interface Operator {
   name: string;
-  description: string;
   options: OperatorOptions;
-  type: OperatorTypes;
-  disabled: boolean;
 }
 
 export interface OperatorOptions {}
