@@ -1,10 +1,4 @@
 import { Component, computed, input, OnInit } from '@angular/core';
-import { OPERATOR_DEFAULTS } from '../../../../../../data/default-values';
-import { OperatorName } from '../../../../../../data/operators';
-import {
-  OperatorOptions,
-  ValueOperatorOptions,
-} from '../../../../../../engine/models/operator.model';
 import {
   FormControl,
   FormGroup,
@@ -14,6 +8,9 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { OperatorName } from '../../../../../../../data/operators';
+import { OPERATOR_DEFAULTS } from '../../../../../../../data/default-values';
+import { ValueOperatorOptions } from '../../../../../../../engine/models/operator.model';
 
 @Component({
   selector: 'app-value-options',

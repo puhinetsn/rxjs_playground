@@ -1,6 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { OperatorInfo } from '../../../../data/operators';
+import { ValueOptions } from './components/value-options/value-options';
+import { MatButtonModule } from '@angular/material/button';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ComparisonOptions } from './components/comparison-options/comparison-options';
+import { AccumulatorOptions } from './components/accumulator-options/accumulator-options';
+import { HigherOrderOptions } from './components/higher-order-options/higher-order-options';
+import { OperatorInfo } from '../../../../../data/operators';
 import {
   OPERATOR_DEFAULTS,
   OPERATORS_WITH_ACCUMULATOR_OPTIONS,
@@ -8,14 +14,8 @@ import {
   OPERATORS_WITH_HIGHER_ORDER_OPTIONS,
   OPERATORS_WITH_NOTIFIER_OPTIONS,
   OPERATORS_WITH_VALUE_OPTIONS,
-} from '../../../../data/default-values';
-import { ValueOptions } from './components/value-options/value-options';
-import { MatButtonModule } from '@angular/material/button';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OperatorOptions } from '../../../../engine/models/operator.model';
-import { ComparisonOptions } from './components/comparison-options/comparison-options';
-import { AccumulatorOptions } from './components/accumulator-options/accumulator-options';
-import { HigherOrderOptions } from './components/higher-order-options/higher-order-options';
+} from '../../../../../data/default-values';
+import { OperatorOptions } from '../../../../../engine/models/operator.model';
 
 @Component({
   selector: 'app-operator-options-modal',

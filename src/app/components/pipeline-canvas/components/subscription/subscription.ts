@@ -2,7 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { PipelineSubscription } from '../../../../engine/models/subscribtion.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { AddOperatorModal } from '../add-operator-modal/add-operator-modal';
+import { AddOperatorModal } from '../modals/add-operator-modal/add-operator-modal';
 
 @Component({
   selector: 'app-subscription',
