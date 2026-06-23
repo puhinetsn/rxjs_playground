@@ -1,11 +1,7 @@
-<h5 mat-dialog-title>Add Operator</h5>
+@let operatorValue = operator();
 
-<mat-dialog-content>
-  @for (operator of operatorTypes; track $index) {
-    <app-operators-list [operatorsType]="operator" />
-  }
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button matButton mat-dialog-close>Back</button>
-</mat-dialog-actions>
+@if (operatorValue) {
+  <app-operator-options [data]="operatorValue" (operatorCustomData)="setOperatorOptions($event)" />
+} @else {
+  <app-operators-list (operator)="setOperator($event)" />
+}

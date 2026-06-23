@@ -1,0 +1,23 @@
+<mat-dialog-content>
+  <h5 mat-dialog-title>Add .{{ data().name }}() Operator</h5>
+
+  <div class="p-3 border-box no-hover elements-bcg">
+    <p>{{ data().description }}</p>
+  </div>
+
+  <form [formGroup]="form" (submit)="submitPipe()">
+    @if (dataValueOptions()) {
+      <app-value-options [operatorName]="data().name" [form]="form" />
+    } @else if (dataComparisonOptions()) {
+      <app-comparison-options [operatorName]="data().name" [form]="form" />
+    } @else if (dataAccumulatorOptions()) {
+      <app-accumulator-options [operatorName]="data().name" [form]="form" />
+    } @else if (dataHigherOrderOptions()) {
+      <app-higher-order-options [operatorName]="data().name" [form]="form" />
+    }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" matButton mat-dialog-close>Back</button>
+  <button type="submit" matButton cdkFocusInitial (click)="submitPipe()">Add To Pipe</button>
+</mat-dialog-actions>

@@ -9,12 +9,12 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { OperatorName } from '../../../../../../../data/operators';
+import { OperatorName } from '../../../../../../../../../data/operators';
+import { OPERATOR_DEFAULTS } from '../../../../../../../../../data/default-values';
 import {
   ComparisonOperatorOptions,
   ComparisonOperators,
-} from '../../../../../../../engine/models/operator.model';
-import { OPERATOR_DEFAULTS } from '../../../../../../../data/default-values';
+} from '../../../../../../../../../engine/models/operator.model';
 
 @Component({
   selector: 'app-comparison-options',

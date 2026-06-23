@@ -9,9 +9,9 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { OperatorName } from '../../../../../../../data/operators';
-import { OPERATOR_DEFAULTS } from '../../../../../../../data/default-values';
-import { HigherOrderMapOptions } from '../../../../../../../engine/models/operator.model';
+import { OperatorName } from '../../../../../../../../../data/operators';
+import { OPERATOR_DEFAULTS } from '../../../../../../../../../data/default-values';
+import { HigherOrderMapOptions } from '../../../../../../../../../engine/models/operator.model';
 
 @Component({
   selector: 'app-higher-order-options',

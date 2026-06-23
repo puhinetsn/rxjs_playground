@@ -1,14 +1,11 @@
-<p class="fs-5">{{ operatorsType() }}</p>
+<h5 mat-dialog-title>Add Operator</h5>
 
-<div class="operators-list my-3">
-  @for (operator of operatorsList(); track $index) {
-    <div
-      class="border-box p-2 elements-bcg"
-      [ngClass]="{ disabled: operator.disabled, 'no-hover': operator.disabled }"
-      (click)="openDialog(operator)"
-    >
-      <h6>.{{ operator.name }}()</h6>
-      <p>{{ operator.description }}</p>
-    </div>
+<mat-dialog-content>
+  @for (operator of operatorTypes; track $index) {
+    <app-list-item [operatorsType]="operator" (operatorData)="setOperatorSelected($event)" />
   }
-</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>Back</button>
+</mat-dialog-actions>

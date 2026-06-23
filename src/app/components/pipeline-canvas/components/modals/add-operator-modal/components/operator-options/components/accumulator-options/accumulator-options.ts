@@ -9,12 +9,12 @@ import {
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { OperatorName } from '../../../../../../../data/operators';
-import { OPERATOR_DEFAULTS } from '../../../../../../../data/default-values';
+import { OperatorName } from '../../../../../../../../../data/operators';
+import { OPERATOR_DEFAULTS } from '../../../../../../../../../data/default-values';
 import {
   AccumulatorOperatorOptions,
   NumericOperators,
-} from '../../../../../../../engine/models/operator.model';
+} from '../../../../../../../../../engine/models/operator.model';
 
 @Component({
   selector: 'app-accumulator-options',
