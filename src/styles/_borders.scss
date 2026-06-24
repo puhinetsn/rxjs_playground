@@ -12,6 +12,11 @@
   border-style: dashed;
 }
 
+.border-box-light {
+  border: 1px solid var(--color-elements);
+  border-radius: 10px;
+}
+
 .border-line-b {
   border-bottom: 2px solid var(--color-inactive);
 }
