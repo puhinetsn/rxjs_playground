@@ -1,0 +1,15 @@
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.button-icon {
+  height: 20px;
+  width: 20px;
+  font-size: 20x;
+}
+
+.reset {
+  color: red;
+}

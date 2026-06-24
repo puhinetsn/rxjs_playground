@@ -70,10 +70,14 @@ p {
   opacity: 50%;
 }
 
+.console-bcg {
+  background-color: var(--color-inactive);
+}
+
 .mat-mdc-form-field {
   --mat-form-field-outlined-focus-outline-color: var(--color-elements);
   --mat-form-field-outlined-hover-outline-color: var(--color-elements);
-  --mat-sys-outline: var(--color-elements);
+  --mat-sys-outline: var(--color-inactive);
   --mat-form-field-outlined-container-shape: 15px;
   --mat-form-field-outlined-input-text-placeholder-color: var(--color-text-secondary);
   .mdc-text-field--outlined {
