@@ -1,0 +1,25 @@
+<div class="p-3 border-box no-hover d-flex flex-column gap-3 elements-bcg">
+  <p>INPUT VALUES</p>
+
+  <form [formGroup]="valueForm" (ngSubmit)="onSubmit()" class="d-flex gap-3">
+    <mat-form-field class="d-flex flex-grow-1">
+      <input
+        type="number"
+        matInput
+        [errorStateMatcher]="matcher"
+        formControlName="value"
+        placeholder="Enter a value..."
+      />
+      <mat-error>Enter valid value</mat-error>
+    </mat-form-field>
+    <button type="reset" class="icon-btn border-box inactive">
+      <mat-icon (click)="onSubmit()" class="material-symbols-outlined"> add </mat-icon>
+    </button>
+  </form>
+
+  <div class="d-flex gap-2 flex-wrap">
+    @for (value of inputValues(); track $index) {
+      <app-input-value [value]="value" (removedNumber)="removeNumber($index)" />
+    }
+  </div>
+</div>
