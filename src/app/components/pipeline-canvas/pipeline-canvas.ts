@@ -1,11 +1,14 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { AddSubscriber } from './components/add-subscriber/add-subscriber';
 import { PipelineSubscription } from '../../engine/models/subscribtion.model';
 import { Subscription } from './components/subscription/subscription';
+import { ObservableExecutor } from '../../engine/execution/execution';
+import { JsonPipe } from '@angular/common';
+import { Operator } from '../../engine/models/operator.model';
 
 @Component({
   selector: 'app-pipeline-canvas',
-  imports: [AddSubscriber, Subscription],
+  imports: [AddSubscriber, Subscription, JsonPipe],
   templateUrl: './pipeline-canvas.html',
   styleUrl: './pipeline-canvas.scss',
 })
@@ -17,6 +20,8 @@ export class PipelineCanvas {
     },
   ]);
   subscIndex = signal<number>(1);
+
+  observableExecutor = computed(() => new ObservableExecutor(this.subscriptions()));
 
   addNewSubscriber() {
     this.subscriptions.update((subs) => [
@@ -33,6 +38,24 @@ export class PipelineCanvas {
   deleteSuscription(elIndex: number) {
     this.subscriptions.update((subscriptions) =>
       subscriptions.filter((_, index) => index != elIndex),
+    );
+  }
+
+  removeOperator(operatorIndex: number, subscIndex: number) {
+    this.subscriptions.update((subscriptions) =>
+      subscriptions.map((subsc, i) =>
+        i === subscIndex
+          ? { ...subsc, operators: subsc.operators.filter((_, oi) => oi !== operatorIndex) }
+          : subsc,
+      ),
+    );
+  }
+
+  addNewOperator(operator: Operator, subscIndex: number) {
+    this.subscriptions.update((subscriptions) =>
+      subscriptions.map((subsc, i) =>
+        i === subscIndex ? { ...subsc, operators: [...subsc.operators, operator] } : subsc,
+      ),
     );
   }
 }
