@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    @for (pipe of subscriptionPipes(); track $index) {
+    @for (pipe of subscription().operators; track $index) {
       <div class="background-line"></div>
       <app-pipe-operator [pipe]="pipe" (removePipeOperator)="removeOperator($index)" />
     }

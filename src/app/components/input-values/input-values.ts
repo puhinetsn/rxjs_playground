@@ -22,7 +22,6 @@ import { NeverErrorStateMatcher } from '../../utils/error-state-matcher.util';
     MatFormFieldModule,
     MatInputModule,
     InputValue,
-    JsonPipe,
   ],
   templateUrl: './input-values.html',
   styleUrl: './input-values.scss',

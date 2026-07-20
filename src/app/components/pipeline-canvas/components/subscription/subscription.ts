@@ -13,26 +13,27 @@ import { PipeOperator } from './components/pipe-operator/pipe-operator';
   styleUrl: './subscription.scss',
 })
 export class Subscription {
-  subscription = input.required<PipelineSubscription>();
-  deleteEl = output();
   dialog = inject(MatDialog);
-  subscriptionPipes = signal<Operator[]>([]);
+  subscription = input.required<PipelineSubscription>();
+  deleteSubscEvent = output();
+  addNewOperatorEvent = output<Operator>();
+  removeOperatorEvent = output<number>();
 
   openDialog() {
     const operatorDialog = this.dialog.open(AddOperatorModal);
 
     operatorDialog.afterClosed().subscribe((operator: Operator) => {
       if (operator) {
-        this.subscriptionPipes.update((ops) => [...ops, operator]);
+        this.addNewOperatorEvent.emit(operator);
       }
     });
   }
 
   deleteSubsc() {
-    this.deleteEl.emit();
+    this.deleteSubscEvent.emit();
   }
 
   removeOperator(index: number) {
-    this.subscriptionPipes.update(() => this.subscriptionPipes().filter((_, i) => i !== index));
+    this.removeOperatorEvent.emit(index);
   }
 }
