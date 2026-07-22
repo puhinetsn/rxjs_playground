@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, model } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -32,7 +32,7 @@ export class InputValues {
   });
   matcher = new NeverErrorStateMatcher();
 
-  inputValues = signal<number[]>([3, 7, 1, 9, 4, 6]);
+  inputValues = model<number[]>([3, 7, 1, 9, 4, 6]);
 
   removeNumber(numberIndex: number) {
     this.inputValues.update(() => this.inputValues().filter((_, index) => index != numberIndex));

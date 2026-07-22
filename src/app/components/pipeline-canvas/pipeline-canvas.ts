@@ -1,10 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { AddSubscriber } from './components/add-subscriber/add-subscriber';
-import { PipelineSubscription } from '../../engine/models/subscribtion.model';
 import { Subscription } from './components/subscription/subscription';
-import { ObservableExecutor } from '../../engine/execution/execution';
 import { JsonPipe } from '@angular/common';
 import { Operator } from '../../engine/models/operator.model';
+import { ExecutorService } from '../../services/executor-service';
 
 @Component({
   selector: 'app-pipeline-canvas',
@@ -13,49 +12,26 @@ import { Operator } from '../../engine/models/operator.model';
   styleUrl: './pipeline-canvas.scss',
 })
 export class PipelineCanvas {
-  subscriptions = signal<PipelineSubscription[]>([
-    {
-      name: `sub1$`,
-      operators: [],
-    },
-  ]);
-  subscIndex = signal<number>(1);
+  executorService = inject(ExecutorService);
 
-  observableExecutor = computed(() => new ObservableExecutor(this.subscriptions()));
+  observableExecutor = this.executorService.observableExecutor;
+  subscriptions = this.executorService.subscriptions;
+
+  observableValues = input<number[]>();
 
   addNewSubscriber() {
-    this.subscriptions.update((subs) => [
-      ...subs,
-      {
-        name: `sub${this.subscIndex() + 1}$`,
-        operators: [],
-      },
-    ]);
-
-    this.subscIndex.update((subscIndex) => subscIndex + 1);
+    this.executorService.addNewSubscriber();
   }
 
   deleteSuscription(elIndex: number) {
-    this.subscriptions.update((subscriptions) =>
-      subscriptions.filter((_, index) => index != elIndex),
-    );
+    this.executorService.deleteSuscription(elIndex);
   }
 
   removeOperator(operatorIndex: number, subscIndex: number) {
-    this.subscriptions.update((subscriptions) =>
-      subscriptions.map((subsc, i) =>
-        i === subscIndex
-          ? { ...subsc, operators: subsc.operators.filter((_, oi) => oi !== operatorIndex) }
-          : subsc,
-      ),
-    );
+    this.executorService.removeOperator(operatorIndex, subscIndex);
   }
 
   addNewOperator(operator: Operator, subscIndex: number) {
-    this.subscriptions.update((subscriptions) =>
-      subscriptions.map((subsc, i) =>
-        i === subscIndex ? { ...subsc, operators: [...subsc.operators, operator] } : subsc,
-      ),
-    );
+    this.executorService.addNewOperator(operator, subscIndex);
   }
 }
