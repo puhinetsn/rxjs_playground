@@ -15,6 +15,8 @@ export class ExecutorService {
   ]);
   subscIndex = signal<number>(1);
 
+  observablesValues = signal<number[]>([]);
+
   observableExecutor = computed(() => new ObservableExecutor(this.subscriptions()));
 
   addNewSubscriber() {
@@ -51,5 +53,15 @@ export class ExecutorService {
         i === subscIndex ? { ...subsc, operators: [...subsc.operators, operator] } : subsc,
       ),
     );
+  }
+
+  addObservableValues(numbers: number[]) {
+    this.observablesValues.set(numbers);
+  }
+
+  emitObservableValue() {
+    for (let i = 0; i < this.observablesValues.length; i++) {
+      this.observableExecutor().emitSubscValues(this.observablesValues()[i]);
+    }
   }
 }

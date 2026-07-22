@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { AddSubscriber } from './components/add-subscriber/add-subscriber';
 import { Subscription } from './components/subscription/subscription';
 import { JsonPipe } from '@angular/common';
@@ -16,6 +16,8 @@ export class PipelineCanvas {
 
   observableExecutor = this.executorService.observableExecutor;
   subscriptions = this.executorService.subscriptions;
+
+  observableValues = input<number[]>();
 
   addNewSubscriber() {
     this.executorService.addNewSubscriber();

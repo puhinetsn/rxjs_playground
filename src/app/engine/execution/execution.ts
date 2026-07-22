@@ -15,7 +15,7 @@ export class ObservableExecutor {
     }
   }
 
-  operatorItemToPipe(subscription: PipelineSubscription) {
+  private operatorItemToPipe(subscription: PipelineSubscription) {
     let pipeline: Observable<number> = this.observableObject;
     const pipesChain: OperatorFunction<number, number>[] = [];
     for (const operator of subscription.operators) {
@@ -24,10 +24,14 @@ export class ObservableExecutor {
     }
     pipeline = this.observableObject.pipe(...(pipesChain as []));
 
-    pipeline.subscribe((val) => console.log('Value:', val));
-    this.observer.next(3);
-    this.observer.complete();
+    // pipeline.subscribe((val) => console.log('Value:', val));
   }
 
-  // customTapOperator()
+  emitSubscValues(number: number) {
+    this.observer.next(number);
+  }
+
+  private stopValueEmitions() {
+    this.observer.complete();
+  }
 }

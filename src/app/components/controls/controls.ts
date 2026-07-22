@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -7,4 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './controls.html',
   styleUrl: './controls.scss',
 })
-export class Controls {}
+export class Controls {
+  emitValue() {
+    this.emitNextValue.emit();
+  }
+  emitNextValue = output<void>();
+}
