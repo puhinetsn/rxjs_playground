@@ -8,4 +8,14 @@
 
   <h6>.{{ pipe().name }}()</h6>
   <p>{{ pipe().options | json }}</p>
+
+  @if (currentValue()) {
+    <div class="d-flex">
+      @for (item of currentValue(); track item.id) {
+        <div class="input-value">
+          {{ item.value }}
+        </div>
+      }
+    </div>
+  }
 </div>
