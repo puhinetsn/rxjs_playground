@@ -74,6 +74,10 @@ p {
   background-color: var(--color-inactive);
 }
 
+.input-value {
+  color: var(--color-elements);
+}
+
 .mat-mdc-form-field {
   --mat-form-field-outlined-focus-outline-color: var(--color-elements);
   --mat-form-field-outlined-hover-outline-color: var(--color-elements);

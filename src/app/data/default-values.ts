@@ -26,7 +26,7 @@ const higherOrder = (innerCount: number, intervalMs: number): HigherOrderMapOpti
 const notifier = (notifierId: string): NotifierOperatorOptions => ({ notifierId });
 
 export const OPERATOR_DEFAULTS: Record<OperatorName, OperatorOptions> = {
-  [OperatorName.Delay]: value(1000),
+  [OperatorName.Delay]: value(3000),
   [OperatorName.Take]: value(3),
   [OperatorName.TakeLast]: value(3),
   [OperatorName.Skip]: value(1),

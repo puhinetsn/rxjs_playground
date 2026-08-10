@@ -1,5 +1,5 @@
-import { computed, Injectable, signal } from '@angular/core';
-import { ObservableExecutor } from '../engine/execution/execution';
+import { computed, effect, Injectable, signal } from '@angular/core';
+import { ObservableExecutor, SubscExecState } from '../engine/execution/execution';
 import { PipelineSubscription } from '../engine/models/subscribtion.model';
 import { Operator } from '../engine/models/operator.model';
 
@@ -9,20 +9,33 @@ import { Operator } from '../engine/models/operator.model';
 export class ExecutorService {
   subscriptions = signal<PipelineSubscription[]>([
     {
+      id: crypto.randomUUID(),
       name: `sub1$`,
       operators: [],
     },
   ]);
+  public subscriptionsStates = signal<Record<string, SubscExecState>>({});
   subscIndex = signal<number>(1);
 
-  observablesValues = signal<number[]>([]);
-
   observableExecutor = computed(() => new ObservableExecutor(this.subscriptions()));
+
+  constructor() {
+    effect(() => {
+      const subscription = this.observableExecutor().changedValue.subscribe((value) => {
+        this.subscriptionsStates.set(value);
+      });
+      return () => subscription.unsubscribe();
+    });
+    effect(() => {
+      console.log(this.subscriptionsStates());
+    });
+  }
 
   addNewSubscriber() {
     this.subscriptions.update((subs) => [
       ...subs,
       {
+        id: crypto.randomUUID(),
         name: `sub${this.subscIndex() + 1}$`,
         operators: [],
       },
@@ -55,13 +68,7 @@ export class ExecutorService {
     );
   }
 
-  addObservableValues(numbers: number[]) {
-    this.observablesValues.set(numbers);
-  }
-
-  emitObservableValue() {
-    for (let i = 0; i < this.observablesValues.length; i++) {
-      this.observableExecutor().emitSubscValues(this.observablesValues()[i]);
-    }
+  emitObservableValues(values: number[]) {
+    this.observableExecutor().emitValues(values);
   }
 }

@@ -18,6 +18,6 @@ export class App {
   executorService = inject(ExecutorService);
 
   emitValues() {
-    this.executorService.addObservableValues(this.inputValues());
+    this.executorService.emitObservableValues(this.inputValues());
   }
 }

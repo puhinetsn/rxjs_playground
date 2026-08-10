@@ -1,37 +1,110 @@
-import { Observable, OperatorFunction, Subscriber } from 'rxjs';
+import { BehaviorSubject, delay, Observable, OperatorFunction, Subject, tap } from 'rxjs';
 import { PipelineSubscription } from '../models/subscribtion.model';
 import { parsePipeOperator } from '../pipes/add-pipe-operator';
 
-export class ObservableExecutor {
-  private observableObject: Observable<number>;
-  private observer!: Subscriber<number>;
+export interface SubscExecState {
+  subscId: string;
+  sourceValues: EmittedValue[];
+  pipesValues: Record<string, EmittedValue[]>;
+  output: EmittedValue[];
+}
 
-  constructor(private subscriptions: PipelineSubscription[]) {
-    this.observableObject = new Observable<number>((observer) => {
-      this.observer = observer;
-    });
+export interface EmittedValue {
+  id: string;
+  value: number;
+}
+
+export class ObservableExecutor {
+  private subject = new Subject<EmittedValue>();
+  public changedValue: BehaviorSubject<Record<string, SubscExecState>>;
+  private subscriptionsStates: Record<string, SubscExecState> = {};
+
+  constructor(subscriptions: PipelineSubscription[]) {
     for (const subscription of subscriptions) {
       this.operatorItemToPipe(subscription);
     }
+
+    this.changedValue = new BehaviorSubject<Record<string, SubscExecState>>(
+      this.subscriptionsStates,
+    );
   }
 
   private operatorItemToPipe(subscription: PipelineSubscription) {
-    let pipeline: Observable<number> = this.observableObject;
-    const pipesChain: OperatorFunction<number, number>[] = [];
+    this.subscriptionsStates[subscription.id] = {
+      subscId: subscription.id,
+      sourceValues: [],
+      pipesValues: {},
+      output: [],
+    };
+
+    let pipeline: Observable<EmittedValue> = this.subject;
+    const pipesChain: OperatorFunction<EmittedValue, EmittedValue>[] = [];
+
+    pipesChain.push(
+      tap((val) => {
+        this.subscriptionsStates[subscription.id].sourceValues.push(val);
+        this.emitUpdatedState();
+      }),
+      delay(2000),
+      tap((val) => {
+        this.subscriptionsStates[subscription.id].sourceValues = this.subscriptionsStates[
+          subscription.id
+        ].sourceValues.filter((value) => value.id !== val.id);
+        this.emitUpdatedState();
+      }),
+    );
+
     for (const operator of subscription.operators) {
       const newPipe = parsePipeOperator(operator);
+
+      this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [];
+
+      pipesChain.push(delay(2000));
+
       pipesChain.push(newPipe);
+
+      pipesChain.push(
+        tap((val) => {
+          const values = this.subscriptionsStates[subscription.id].pipesValues[operator.id];
+          this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [...values, val];
+          this.emitUpdatedState();
+        }),
+        delay(2000),
+        tap((val) => {
+          this.subscriptionsStates[subscription.id].pipesValues[operator.id] =
+            this.subscriptionsStates[subscription.id].pipesValues[operator.id].filter(
+              (value) => value.id !== val.id,
+            );
+          this.emitUpdatedState();
+        }),
+      );
     }
-    pipeline = this.observableObject.pipe(...(pipesChain as []));
+    pipesChain.push(delay(2000));
+    pipeline = this.subject.pipe(...(pipesChain as []));
 
-    // pipeline.subscribe((val) => console.log('Value:', val));
+    pipeline.subscribe((val) => {
+      const values = this.subscriptionsStates[subscription.id].output;
+      this.subscriptionsStates[subscription.id].output = [...values, val];
+      this.emitUpdatedState();
+    });
   }
 
-  emitSubscValues(number: number) {
-    this.observer.next(number);
+  emitValues(numbers: number[]) {
+    const exec = async () => {
+      for (const num of numbers) {
+        this.subject.next({
+          id: crypto.randomUUID(),
+          value: num,
+        });
+        await new Promise<void>((res) => setTimeout(() => res(), 100));
+      }
+      this.subject.complete();
+    };
+
+    exec();
   }
 
-  private stopValueEmitions() {
-    this.observer.complete();
+  emitUpdatedState() {
+    this.changedValue.next(structuredClone(this.subscriptionsStates));
   }
 }

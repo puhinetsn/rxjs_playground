@@ -72,16 +72,24 @@ import {
   Operator,
   ValueOperatorOptions,
 } from '../models/operator.model';
+import { EmittedValue } from '../execution/execution';
 
-export function parsePipeOperator(pipe: Operator): OperatorFunction<number, number> {
+// Wraps a raw number back into the EmittedValue shape with a fresh id.
+function wrap(value: number): EmittedValue {
+  return { id: crypto.randomUUID(), value };
+}
+
+export function parsePipeOperator(pipe: Operator): OperatorFunction<EmittedValue, EmittedValue> {
   switch (pipe.name) {
     case OperatorName.Map: {
       const options = pipe.options as AccumulatorOperatorOptions;
-      return map((num: number) => applyOperator(num, options.operator, options.seed));
+      return map((ev: EmittedValue) =>
+        wrap(applyOperator(ev.value, options.operator, options.seed)),
+      );
     }
     case OperatorName.MapTo: {
       const options = pipe.options as ValueOperatorOptions;
-      return map(() => options.value);
+      return map(() => wrap(options.value));
     }
     // case OperatorName.Pairwise: {
     //   return pairwise();
@@ -89,37 +97,45 @@ export function parsePipeOperator(pipe: Operator): OperatorFunction<number, numb
     case OperatorName.Scan: {
       const options = pipe.options as AccumulatorOperatorOptions;
       return scan(
-        (acc: number, val: number) => applyOperator(val, options.operator, acc),
-        options.seed,
+        (acc: EmittedValue, val: EmittedValue) =>
+          wrap(applyOperator(val.value, options.operator, acc.value)),
+        wrap(options.seed),
       );
     }
     case OperatorName.SwitchScan: {
       const options = pipe.options as AccumulatorOperatorOptions;
-      return switchScan((acc: number, val: number) => new Subject<number>(), options.seed);
+      return switchScan(
+        (acc: EmittedValue, val: EmittedValue) => new Subject<EmittedValue>(),
+        wrap(options.seed),
+      );
     }
     case OperatorName.MergeScan: {
       const options = pipe.options as AccumulatorOperatorOptions;
-      return mergeScan((acc: number, val: number) => new Subject<number>(), options.seed);
+      return mergeScan(
+        (acc: EmittedValue, val: EmittedValue) => new Subject<EmittedValue>(),
+        wrap(options.seed),
+      );
     }
     case OperatorName.Reduce: {
       const options = pipe.options as AccumulatorOperatorOptions;
       return reduce(
-        (acc: number, val: number) => applyOperator(val, options.operator, acc),
-        options.seed,
+        (acc: EmittedValue, val: EmittedValue) =>
+          wrap(applyOperator(val.value, options.operator, acc.value)),
+        wrap(options.seed),
       );
     }
     case OperatorName.MergeMap: {
       const options = pipe.options as HigherOrderMapOptions;
-      return mergeMap((val: number) => new Subject<number>());
+      return mergeMap((val: EmittedValue) => new Subject<EmittedValue>());
     }
     case OperatorName.SwitchMap: {
-      return switchMap((val: number) => new Subject<number>());
+      return switchMap((val: EmittedValue) => new Subject<EmittedValue>());
     }
     case OperatorName.ConcatMap: {
-      return concatMap((val: number) => new Subject<number>());
+      return concatMap((val: EmittedValue) => new Subject<EmittedValue>());
     }
     case OperatorName.ExhaustMap: {
-      return exhaustMap((val: number) => new Subject<number>());
+      return exhaustMap((val: EmittedValue) => new Subject<EmittedValue>());
     }
     // case OperatorName.BufferCount: {
     //   const options = pipe.options as ValueOperatorOptions;
@@ -154,37 +170,53 @@ export function parsePipeOperator(pipe: Operator): OperatorFunction<number, numb
       return last();
     }
     case OperatorName.Distinct: {
-      return distinct();
+      // dedupe by the numeric value, not by object identity (every EmittedValue has a unique id)
+      return distinct((ev: EmittedValue) => ev.value);
     }
     case OperatorName.DistinctUntilChanged: {
-      return distinctUntilChanged();
+      return distinctUntilChanged(
+        (prev: EmittedValue, curr: EmittedValue) => prev.value === curr.value,
+      );
     }
     case OperatorName.IgnoreElements: {
       return ignoreElements();
     }
     case OperatorName.Filter: {
       const options = pipe.options as ComparisonOperatorOptions;
-      return filter((val: number) => applyComparison(val, options.operator, options.value));
+      return filter((ev: EmittedValue) =>
+        applyComparison(ev.value, options.operator, options.value),
+      );
     }
     case OperatorName.TakeWhile: {
       const options = pipe.options as ComparisonOperatorOptions;
-      return takeWhile((val: number) => applyComparison(val, options.operator, options.value));
+      return takeWhile((ev: EmittedValue) =>
+        applyComparison(ev.value, options.operator, options.value),
+      );
     }
     case OperatorName.SkipWhile: {
       const options = pipe.options as ComparisonOperatorOptions;
-      return skipWhile((val: number) => applyComparison(val, options.operator, options.value));
+      return skipWhile((ev: EmittedValue) =>
+        applyComparison(ev.value, options.operator, options.value),
+      );
     }
     // case OperatorName.Every: {
     //   const options = pipe.options as ComparisonOperatorOptions;
-    //   return every((val: number) => applyComparison(val, options.operator, options.value));
+    //   return every((ev: EmittedValue) => applyComparison(ev.value, options.operator, options.value));
     // }
     // case OperatorName.Find: {
     //   const options = pipe.options as ComparisonOperatorOptions;
-    //   return find((val: number) => applyComparison(val, options.operator, options.value));
+    //   return find((ev: EmittedValue) => applyComparison(ev.value, options.operator, options.value));
     // }
     case OperatorName.FindIndex: {
       const options = pipe.options as ComparisonOperatorOptions;
-      return findIndex((val: number) => applyComparison(val, options.operator, options.value));
+      // findIndex emits a raw number (the index) — wrap it back into EmittedValue
+      return (source) =>
+        source.pipe(
+          findIndex((ev: EmittedValue) =>
+            applyComparison(ev.value, options.operator, options.value),
+          ),
+          map((idx: number) => wrap(idx)),
+        );
     }
     case OperatorName.Take: {
       const options = pipe.options as ValueOperatorOptions;
@@ -244,11 +276,11 @@ export function parsePipeOperator(pipe: Operator): OperatorFunction<number, numb
     //   return combineLatestAll();
     case OperatorName.StartWith: {
       const options = pipe.options as ValueOperatorOptions;
-      return startWith(options.value);
+      return startWith(wrap(options.value));
     }
     // case OperatorName.WithLatestFrom: {
     //   const options = pipe.options as NotifierOperatorOptions;
-    //   return mergeMap((val: number) => notifiers[options.notifierId]);
+    //   return mergeMap((val: EmittedValue) => notifiers[options.notifierId]);
     // }
     // case OperatorName.SequenceEqual: {
     //   const options = pipe.options as NotifierOperatorOptions;
@@ -286,16 +318,23 @@ export function parsePipeOperator(pipe: Operator): OperatorFunction<number, numb
     //   return isEmpty();
     case OperatorName.DefaultIfEmpty: {
       const options = pipe.options as ValueOperatorOptions;
-      return defaultIfEmpty(options.value);
+      return defaultIfEmpty(wrap(options.value));
     }
 
     // --- Mathematical & aggregate ---
-    case OperatorName.Count:
-      return count();
+    case OperatorName.Count: {
+      // count() emits a raw number — wrap it back into EmittedValue
+      return (source) =>
+        source.pipe(
+          count(),
+          map((n: number) => wrap(n)),
+        );
+    }
     case OperatorName.Min:
-      return min();
+      // min/max keep the original EmittedValue (with its id) that held the extreme value
+      return min((a: EmittedValue, b: EmittedValue) => a.value - b.value);
     case OperatorName.Max:
-      return max();
+      return max((a: EmittedValue, b: EmittedValue) => a.value - b.value);
 
     default:
       throw new Error(`Unknown operator: ${pipe.name}`);

@@ -10,7 +10,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { InputValue } from './input-value/input-value';
-import { JsonPipe } from '@angular/common';
 import { NeverErrorStateMatcher } from '../../utils/error-state-matcher.util';
 
 @Component({
@@ -35,7 +34,7 @@ export class InputValues {
   inputValues = model<number[]>([3, 7, 1, 9, 4, 6]);
 
   removeNumber(numberIndex: number) {
-    this.inputValues.update(() => this.inputValues().filter((_, index) => index != numberIndex));
+    this.inputValues.update((values) => values.filter((_, index) => index != numberIndex));
   }
 
   onSubmit() {

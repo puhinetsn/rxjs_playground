@@ -17,7 +17,7 @@ import {
   OPERATORS_WITH_NOTIFIER_OPTIONS,
   OPERATORS_WITH_VALUE_OPTIONS,
 } from '../../../../../../../data/default-values';
-import { OperatorOptions } from '../../../../../../../engine/models/operator.model';
+import { Operator, OperatorOptions } from '../../../../../../../engine/models/operator.model';
 
 @Component({
   selector: 'app-operator-options',
@@ -57,6 +57,11 @@ export class OperatorOptionsModal {
   dataNotifierOptions = computed(() => OPERATORS_WITH_NOTIFIER_OPTIONS.includes(this.data().name));
 
   submitPipe() {
-    this.dialogRef.close({ name: this.data().name, options: this.form.value });
+    const operator: Operator = {
+      id: crypto.randomUUID(),
+      name: this.data().name,
+      options: this.form.value,
+    };
+    this.dialogRef.close(operator);
   }
 }

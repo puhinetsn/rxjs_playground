@@ -1,3 +1,5 @@
+@let execState = executionState();
+
 <div class="d-flex container flex-column gap-3">
   <div class="d-flex justify-content-between">
     <p>{{ subscription().name }}</p>
@@ -12,11 +14,22 @@
         <p>Observable</p>
         <h6>source$</h6>
       </div>
+      @if (execState) {
+        @for (source of execState.sourceValues; track source.id) {
+          <div class="input-value">{{ source.value }}</div>
+        }
+      }
     </div>
 
     @for (pipe of subscription().operators; track $index) {
       <div class="background-line"></div>
-      <app-pipe-operator [pipe]="pipe" (removePipeOperator)="removeOperator($index)" />
+      @if (execState) {
+        <app-pipe-operator
+          [currentValue]="execState.pipesValues[pipe.id]"
+          [pipe]="pipe"
+          (removePipeOperator)="removeOperator($index)"
+        />
+      }
     }
     <div class="background-line"></div>
 
@@ -34,6 +47,11 @@
         <p>subscriber</p>
         <h6>output$</h6>
       </div>
+      @if (execState) {
+        @for (output of execState.output; track output.id) {
+          <div class="input-value">{{ output.value }}</div>
+        }
+      }
     </div>
   </div>
 </div>
