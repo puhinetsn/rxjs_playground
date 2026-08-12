@@ -7,6 +7,7 @@ export interface SubscExecState {
   sourceValues: EmittedValue[];
   pipesValues: Record<string, EmittedValue[]>;
   output: EmittedValue[];
+  highlightedValue: string | null;
 }
 
 export interface EmittedValue {
@@ -35,6 +36,7 @@ export class ObservableExecutor {
       sourceValues: [],
       pipesValues: {},
       output: [],
+      highlightedValue: null,
     };
 
     let pipeline: Observable<EmittedValue> = this.subject;
@@ -43,6 +45,7 @@ export class ObservableExecutor {
     pipesChain.push(
       tap((val) => {
         this.subscriptionsStates[subscription.id].sourceValues.push(val);
+        this.subscriptionsStates[subscription.id].highlightedValue = val.id;
         this.emitUpdatedState();
       }),
       delay(2000),
@@ -50,6 +53,7 @@ export class ObservableExecutor {
         this.subscriptionsStates[subscription.id].sourceValues = this.subscriptionsStates[
           subscription.id
         ].sourceValues.filter((value) => value.id !== val.id);
+        this.subscriptionsStates[subscription.id].highlightedValue = val.id;
         this.emitUpdatedState();
       }),
     );
@@ -59,7 +63,7 @@ export class ObservableExecutor {
 
       this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [];
 
-      pipesChain.push(delay(2000));
+      pipesChain.push(delay(1300));
 
       pipesChain.push(newPipe);
 
@@ -67,24 +71,27 @@ export class ObservableExecutor {
         tap((val) => {
           const values = this.subscriptionsStates[subscription.id].pipesValues[operator.id];
           this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [...values, val];
+          this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
-        delay(2000),
+        delay(1300),
         tap((val) => {
           this.subscriptionsStates[subscription.id].pipesValues[operator.id] =
             this.subscriptionsStates[subscription.id].pipesValues[operator.id].filter(
               (value) => value.id !== val.id,
             );
+          this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
       );
     }
-    pipesChain.push(delay(2000));
+    pipesChain.push(delay(1300));
     pipeline = this.subject.pipe(...(pipesChain as []));
 
     pipeline.subscribe((val) => {
       const values = this.subscriptionsStates[subscription.id].output;
       this.subscriptionsStates[subscription.id].output = [...values, val];
+      this.subscriptionsStates[subscription.id].highlightedValue = val.id;
       this.emitUpdatedState();
     });
   }
@@ -96,7 +103,7 @@ export class ObservableExecutor {
           id: crypto.randomUUID(),
           value: num,
         });
-        await new Promise<void>((res) => setTimeout(() => res(), 100));
+        await new Promise<void>((res) => setTimeout(() => res(), 500));
       }
       this.subject.complete();
     };

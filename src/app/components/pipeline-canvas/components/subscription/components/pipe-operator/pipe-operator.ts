@@ -13,6 +13,7 @@ import { EmittedValue } from '../../../../../../engine/execution/execution';
 export class PipeOperator {
   pipe = input.required<Operator>();
   currentValue = input.required<EmittedValue[]>();
+  highlightedValue = input.required<string | null>();
   removePipeOperator = output();
 
   removePipe() {
