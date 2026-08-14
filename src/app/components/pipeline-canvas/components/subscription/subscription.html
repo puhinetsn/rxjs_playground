@@ -27,8 +27,8 @@
     </div>
 
     @for (pipe of subscription().operators; track $index) {
-      <div class="background-line"></div>
       @if (execState) {
+        <div class="background-line"></div>
         <app-pipe-operator
           [currentValue]="execState.pipesValues[pipe.id]"
           [highlightedValue]="execState.highlightedValue"

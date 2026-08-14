@@ -4,7 +4,6 @@ export class ClickGate {
   private waiters: Array<() => void> = [];
 
   wait(): Observable<void> {
-    console.log('wait method works');
     return new Observable<void>((subscriber) => {
       this.waiters.push(() => {
         subscriber.next();
@@ -16,8 +15,15 @@ export class ClickGate {
       };
     });
   }
+
   release() {
     const next = this.waiters.shift();
     if (next) next();
+  }
+
+  releaseAll() {
+    for (const waiter of this.waiters) {
+      waiter();
+    }
   }
 }

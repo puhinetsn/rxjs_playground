@@ -1,15 +1,4 @@
-import {
-  BehaviorSubject,
-  concatMap,
-  delay,
-  Observable,
-  OperatorFunction,
-  skipUntil,
-  Subject,
-  tap,
-  take,
-  map,
-} from 'rxjs';
+import { BehaviorSubject, concatMap, Observable, OperatorFunction, Subject, tap, map } from 'rxjs';
 import { PipelineSubscription } from '../models/subscribtion.model';
 import { parsePipeOperator } from '../pipes/add-pipe-operator';
 import { ClickGate } from './click-gate';
@@ -70,7 +59,6 @@ export class ObservableExecutor {
 
         this.emitUpdatedState();
       }),
-      concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
     );
 
     for (const operator of subscription.operators) {
@@ -96,7 +84,6 @@ export class ObservableExecutor {
           this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
-        concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
       );
     }
 
@@ -112,27 +99,33 @@ export class ObservableExecutor {
   }
 
   emitValues(numbers: number[]) {
-    console.log('values emitted');
     const exec = async () => {
       for (const num of numbers) {
         this.subject.next({
           id: crypto.randomUUID(),
           value: num,
         });
-        await new Promise<void>((res) => setTimeout(() => res(), 500));
+        await new Promise<void>((res) => setTimeout(() => res(), 100));
       }
       this.subject.complete();
     };
     exec();
-
-    console.log(structuredClone(this.subscriptionsStates));
   }
 
   triggerNextStep() {
     this.clickGate.release();
   }
 
+  executeAllSteps() {
+    this.clickGate.releaseAll();
+  }
+
   private emitUpdatedState() {
     this.changedValue.next(structuredClone(this.subscriptionsStates));
+  }
+
+  resetSubscriptions() {
+    this.changedValue.next({});
+    this.subscriptionsStates = {};
   }
 }

@@ -24,4 +24,12 @@ export class App {
   emitStep() {
     this.executorService.emitNextStep();
   }
+
+  emitAll() {
+    this.executorService.emitRunAll();
+  }
+
+  emitReset() {
+    this.executorService.emitReset();
+  }
 }

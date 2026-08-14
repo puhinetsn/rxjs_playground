@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 export class Controls {
   emitNextValue = output<void>();
   emitNextStep = output<void>();
+  emitRunAll = output<void>();
+  emitReset = output<void>();
 
   emitValue() {
     this.emitNextValue.emit();
@@ -17,5 +19,13 @@ export class Controls {
 
   emitStep() {
     this.emitNextStep.emit();
+  }
+
+  runAll() {
+    this.emitRunAll.emit();
+  }
+
+  reset() {
+    this.emitReset.emit();
   }
 }
