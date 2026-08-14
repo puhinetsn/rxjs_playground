@@ -1,6 +1,18 @@
-import { BehaviorSubject, delay, Observable, OperatorFunction, Subject, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  concatMap,
+  delay,
+  Observable,
+  OperatorFunction,
+  skipUntil,
+  Subject,
+  tap,
+  take,
+  map,
+} from 'rxjs';
 import { PipelineSubscription } from '../models/subscribtion.model';
 import { parsePipeOperator } from '../pipes/add-pipe-operator';
+import { ClickGate } from './click-gate';
 
 export interface SubscExecState {
   subscId: string;
@@ -19,6 +31,7 @@ export class ObservableExecutor {
   private subject = new Subject<EmittedValue>();
   public changedValue: BehaviorSubject<Record<string, SubscExecState>>;
   private subscriptionsStates: Record<string, SubscExecState> = {};
+  private clickGate = new ClickGate();
 
   constructor(subscriptions: PipelineSubscription[]) {
     for (const subscription of subscriptions) {
@@ -48,22 +61,22 @@ export class ObservableExecutor {
         this.subscriptionsStates[subscription.id].highlightedValue = val.id;
         this.emitUpdatedState();
       }),
-      delay(2000),
+      concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
       tap((val) => {
         this.subscriptionsStates[subscription.id].sourceValues = this.subscriptionsStates[
           subscription.id
         ].sourceValues.filter((value) => value.id !== val.id);
         this.subscriptionsStates[subscription.id].highlightedValue = val.id;
+
         this.emitUpdatedState();
       }),
+      concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
     );
 
     for (const operator of subscription.operators) {
       const newPipe = parsePipeOperator(operator);
 
       this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [];
-
-      pipesChain.push(delay(1300));
 
       pipesChain.push(newPipe);
 
@@ -74,7 +87,7 @@ export class ObservableExecutor {
           this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
-        delay(1300),
+        concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
         tap((val) => {
           this.subscriptionsStates[subscription.id].pipesValues[operator.id] =
             this.subscriptionsStates[subscription.id].pipesValues[operator.id].filter(
@@ -83,9 +96,10 @@ export class ObservableExecutor {
           this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
+        concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
       );
     }
-    pipesChain.push(delay(1300));
+
     pipeline = this.subject.pipe(...(pipesChain as []));
 
     pipeline.subscribe((val) => {
@@ -93,10 +107,12 @@ export class ObservableExecutor {
       this.subscriptionsStates[subscription.id].output = [...values, val];
       this.subscriptionsStates[subscription.id].highlightedValue = val.id;
       this.emitUpdatedState();
+      concatMap((val) => this.clickGate.wait().pipe(map(() => val)));
     });
   }
 
   emitValues(numbers: number[]) {
+    console.log('values emitted');
     const exec = async () => {
       for (const num of numbers) {
         this.subject.next({
@@ -107,11 +123,16 @@ export class ObservableExecutor {
       }
       this.subject.complete();
     };
-
     exec();
+
+    console.log(structuredClone(this.subscriptionsStates));
   }
 
-  emitUpdatedState() {
+  triggerNextStep() {
+    this.clickGate.release();
+  }
+
+  private emitUpdatedState() {
     this.changedValue.next(structuredClone(this.subscriptionsStates));
   }
 }

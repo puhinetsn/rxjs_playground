@@ -24,10 +24,8 @@ export class ExecutorService {
       const subscription = this.observableExecutor().changedValue.subscribe((value) => {
         this.subscriptionsStates.set(value);
       });
-      return () => subscription.unsubscribe();
-    });
-    effect(() => {
       console.log(this.subscriptionsStates());
+      return () => subscription.unsubscribe();
     });
   }
 
@@ -70,5 +68,9 @@ export class ExecutorService {
 
   emitObservableValues(values: number[]) {
     this.observableExecutor().emitValues(values);
+  }
+
+  emitNextStep() {
+    this.observableExecutor().triggerNextStep();
   }
 }

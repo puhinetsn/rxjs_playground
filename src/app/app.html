@@ -4,7 +4,7 @@
     <app-pipeline-canvas class="col-8" />
     <div class="col-4 d-flex flex-column gap-3">
       <app-input-values [(inputValues)]="inputValues" />
-      <app-controls (emitNextValue)="emitValues()" />
+      <app-controls (emitNextValue)="emitValues()" (emitNextStep)="emitStep()" />
       <app-console />
     </div>
   </div>
