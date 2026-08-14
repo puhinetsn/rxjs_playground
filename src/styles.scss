@@ -78,6 +78,10 @@ p {
   color: var(--color-elements);
 }
 
+.highlight-value {
+  text-shadow: var(--color-elements) 1px 0 10px;
+}
+
 .mat-mdc-form-field {
   --mat-form-field-outlined-focus-outline-color: var(--color-elements);
   --mat-form-field-outlined-hover-outline-color: var(--color-elements);

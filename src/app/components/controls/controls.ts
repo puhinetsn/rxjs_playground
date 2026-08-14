@@ -8,8 +8,24 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './controls.scss',
 })
 export class Controls {
+  emitNextValue = output<void>();
+  emitNextStep = output<void>();
+  emitRunAll = output<void>();
+  emitReset = output<void>();
+
   emitValue() {
     this.emitNextValue.emit();
   }
-  emitNextValue = output<void>();
+
+  emitStep() {
+    this.emitNextStep.emit();
+  }
+
+  runAll() {
+    this.emitRunAll.emit();
+  }
+
+  reset() {
+    this.emitReset.emit();
+  }
 }

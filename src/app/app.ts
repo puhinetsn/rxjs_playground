@@ -20,4 +20,16 @@ export class App {
   emitValues() {
     this.executorService.emitObservableValues(this.inputValues());
   }
+
+  emitStep() {
+    this.executorService.emitNextStep();
+  }
+
+  emitAll() {
+    this.executorService.emitRunAll();
+  }
+
+  emitReset() {
+    this.executorService.emitReset();
+  }
 }

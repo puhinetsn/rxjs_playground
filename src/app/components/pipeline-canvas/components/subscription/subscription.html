@@ -16,16 +16,22 @@
       </div>
       @if (execState) {
         @for (source of execState.sourceValues; track source.id) {
-          <div class="input-value">{{ source.value }}</div>
+          <div
+            class="input-value"
+            [class.highlight-value]="execState.highlightedValue === source.id"
+          >
+            {{ source.value }}
+          </div>
         }
       }
     </div>
 
     @for (pipe of subscription().operators; track $index) {
-      <div class="background-line"></div>
       @if (execState) {
+        <div class="background-line"></div>
         <app-pipe-operator
           [currentValue]="execState.pipesValues[pipe.id]"
+          [highlightedValue]="execState.highlightedValue"
           [pipe]="pipe"
           (removePipeOperator)="removeOperator($index)"
         />
@@ -49,7 +55,12 @@
       </div>
       @if (execState) {
         @for (output of execState.output; track output.id) {
-          <div class="input-value">{{ output.value }}</div>
+          <div
+            class="input-value"
+            [class.highlight-value]="execState.highlightedValue === output.id"
+          >
+            {{ output.value }}
+          </div>
         }
       }
     </div>

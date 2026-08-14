@@ -1,12 +1,14 @@
-import { BehaviorSubject, delay, Observable, OperatorFunction, Subject, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, Observable, OperatorFunction, Subject, tap, map } from 'rxjs';
 import { PipelineSubscription } from '../models/subscribtion.model';
 import { parsePipeOperator } from '../pipes/add-pipe-operator';
+import { ClickGate } from './click-gate';
 
 export interface SubscExecState {
   subscId: string;
   sourceValues: EmittedValue[];
   pipesValues: Record<string, EmittedValue[]>;
   output: EmittedValue[];
+  highlightedValue: string | null;
 }
 
 export interface EmittedValue {
@@ -18,6 +20,7 @@ export class ObservableExecutor {
   private subject = new Subject<EmittedValue>();
   public changedValue: BehaviorSubject<Record<string, SubscExecState>>;
   private subscriptionsStates: Record<string, SubscExecState> = {};
+  private clickGate = new ClickGate();
 
   constructor(subscriptions: PipelineSubscription[]) {
     for (const subscription of subscriptions) {
@@ -35,6 +38,7 @@ export class ObservableExecutor {
       sourceValues: [],
       pipesValues: {},
       output: [],
+      highlightedValue: null,
     };
 
     let pipeline: Observable<EmittedValue> = this.subject;
@@ -43,13 +47,16 @@ export class ObservableExecutor {
     pipesChain.push(
       tap((val) => {
         this.subscriptionsStates[subscription.id].sourceValues.push(val);
+        this.subscriptionsStates[subscription.id].highlightedValue = val.id;
         this.emitUpdatedState();
       }),
-      delay(2000),
+      concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
       tap((val) => {
         this.subscriptionsStates[subscription.id].sourceValues = this.subscriptionsStates[
           subscription.id
         ].sourceValues.filter((value) => value.id !== val.id);
+        this.subscriptionsStates[subscription.id].highlightedValue = val.id;
+
         this.emitUpdatedState();
       }),
     );
@@ -59,33 +66,35 @@ export class ObservableExecutor {
 
       this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [];
 
-      pipesChain.push(delay(2000));
-
       pipesChain.push(newPipe);
 
       pipesChain.push(
         tap((val) => {
           const values = this.subscriptionsStates[subscription.id].pipesValues[operator.id];
           this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [...values, val];
+          this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
-        delay(2000),
+        concatMap((val) => this.clickGate.wait().pipe(map(() => val))),
         tap((val) => {
           this.subscriptionsStates[subscription.id].pipesValues[operator.id] =
             this.subscriptionsStates[subscription.id].pipesValues[operator.id].filter(
               (value) => value.id !== val.id,
             );
+          this.subscriptionsStates[subscription.id].highlightedValue = val.id;
           this.emitUpdatedState();
         }),
       );
     }
-    pipesChain.push(delay(2000));
+
     pipeline = this.subject.pipe(...(pipesChain as []));
 
     pipeline.subscribe((val) => {
       const values = this.subscriptionsStates[subscription.id].output;
       this.subscriptionsStates[subscription.id].output = [...values, val];
+      this.subscriptionsStates[subscription.id].highlightedValue = val.id;
       this.emitUpdatedState();
+      concatMap((val) => this.clickGate.wait().pipe(map(() => val)));
     });
   }
 
@@ -100,11 +109,23 @@ export class ObservableExecutor {
       }
       this.subject.complete();
     };
-
     exec();
   }
 
-  emitUpdatedState() {
+  triggerNextStep() {
+    this.clickGate.release();
+  }
+
+  executeAllSteps() {
+    this.clickGate.releaseAll();
+  }
+
+  private emitUpdatedState() {
     this.changedValue.next(structuredClone(this.subscriptionsStates));
+  }
+
+  resetSubscriptions() {
+    this.changedValue.next({});
+    this.subscriptionsStates = {};
   }
 }

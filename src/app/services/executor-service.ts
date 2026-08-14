@@ -26,9 +26,6 @@ export class ExecutorService {
       });
       return () => subscription.unsubscribe();
     });
-    effect(() => {
-      console.log(this.subscriptionsStates());
-    });
   }
 
   addNewSubscriber() {
@@ -70,5 +67,17 @@ export class ExecutorService {
 
   emitObservableValues(values: number[]) {
     this.observableExecutor().emitValues(values);
+  }
+
+  emitNextStep() {
+    this.observableExecutor().triggerNextStep();
+  }
+
+  emitRunAll() {
+    this.observableExecutor().executeAllSteps();
+  }
+
+  emitReset() {
+    this.observableExecutor().resetSubscriptions();
   }
 }
