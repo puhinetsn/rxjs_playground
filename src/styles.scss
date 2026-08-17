@@ -68,6 +68,7 @@ p {
 
 .disabled {
   opacity: 50%;
+  pointer-events: none;
 }
 
 .console-bcg {

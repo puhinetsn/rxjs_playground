@@ -1,5 +1,6 @@
-import { Component, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { ExecutorService } from '../../services/executor-service';
 
 @Component({
   selector: 'app-controls',
@@ -9,23 +10,21 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class Controls {
   emitNextValue = output<void>();
-  emitNextStep = output<void>();
-  emitRunAll = output<void>();
-  emitReset = output<void>();
+  executorService = inject(ExecutorService);
 
   emitValue() {
     this.emitNextValue.emit();
   }
 
   emitStep() {
-    this.emitNextStep.emit();
+    this.executorService.emitNextStep();
   }
 
   runAll() {
-    this.emitRunAll.emit();
+    this.executorService.emitRunAll();
   }
 
   reset() {
-    this.emitReset.emit();
+    this.executorService.emitReset();
   }
 }

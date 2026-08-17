@@ -53,6 +53,7 @@ import {
   takeLast,
   takeUntil,
   takeWhile,
+  tap,
   throttleTime,
   timeInterval,
   timestamp,
@@ -79,7 +80,10 @@ function wrap(value: number): EmittedValue {
   return { id: crypto.randomUUID(), value };
 }
 
-export function parsePipeOperator(pipe: Operator): OperatorFunction<EmittedValue, EmittedValue> {
+export function parsePipeOperator(
+  pipe: Operator,
+  onMessage: (message: number) => void,
+): OperatorFunction<EmittedValue, EmittedValue> {
   switch (pipe.name) {
     case OperatorName.Map: {
       const options = pipe.options as AccumulatorOperatorOptions;
@@ -302,16 +306,11 @@ export function parsePipeOperator(pipe: Operator): OperatorFunction<EmittedValue
       const options = pipe.options as ValueOperatorOptions;
       return delay(options.value);
     }
-    // case OperatorName.Timestamp:
-    //   return timestamp();
-    // case OperatorName.TimeInterval:
-    //   return timeInterval();
-    // case OperatorName.Materialize:
-    //   return materialize();
-    // // case OperatorName.Dematerialize:
-    // //   return dematerialize();
-    // case OperatorName.ToArray:
-    //   return toArray();
+    case OperatorName.Tap: {
+      return tap((ev: EmittedValue) => {
+        (ev.value, onMessage(ev.value));
+      });
+    }
 
     // --- Conditional & boolean ---
     // case OperatorName.IsEmpty:

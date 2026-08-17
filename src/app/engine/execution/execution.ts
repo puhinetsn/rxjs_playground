@@ -19,6 +19,7 @@ export interface EmittedValue {
 export class ObservableExecutor {
   private subject = new Subject<EmittedValue>();
   public changedValue: BehaviorSubject<Record<string, SubscExecState>>;
+  public consoleValue: Subject<number>;
   private subscriptionsStates: Record<string, SubscExecState> = {};
   private clickGate = new ClickGate();
 
@@ -30,6 +31,8 @@ export class ObservableExecutor {
     this.changedValue = new BehaviorSubject<Record<string, SubscExecState>>(
       this.subscriptionsStates,
     );
+
+    this.consoleValue = new Subject<number>();
   }
 
   private operatorItemToPipe(subscription: PipelineSubscription) {
@@ -62,7 +65,7 @@ export class ObservableExecutor {
     );
 
     for (const operator of subscription.operators) {
-      const newPipe = parsePipeOperator(operator);
+      const newPipe = parsePipeOperator(operator, (message) => this.onConsoleMessage(message));
 
       this.subscriptionsStates[subscription.id].pipesValues[operator.id] = [];
 
@@ -127,5 +130,9 @@ export class ObservableExecutor {
   resetSubscriptions() {
     this.changedValue.next({});
     this.subscriptionsStates = {};
+  }
+
+  onConsoleMessage(message: number) {
+    this.consoleValue.next(message);
   }
 }
