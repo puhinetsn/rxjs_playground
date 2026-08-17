@@ -16,6 +16,10 @@ export class ExecutorService {
   ]);
   public subscriptionsStates = signal<Record<string, SubscExecState>>({});
   subscIndex = signal<number>(1);
+  emitDisabled = signal<boolean>(false);
+  nextStepDisabled = signal<boolean>(true);
+  runAllDisabled = signal<boolean>(true);
+  resetDisabled = signal<boolean>(true);
 
   observableExecutor = computed(() => new ObservableExecutor(this.subscriptions()));
 
@@ -66,6 +70,10 @@ export class ExecutorService {
   }
 
   emitObservableValues(values: number[]) {
+    this.emitDisabled.set(true);
+    this.nextStepDisabled.set(false);
+    this.runAllDisabled.set(false);
+    this.resetDisabled.set(false);
     this.observableExecutor().emitValues(values);
   }
 
@@ -75,9 +83,18 @@ export class ExecutorService {
 
   emitRunAll() {
     this.observableExecutor().executeAllSteps();
+    this.resetToDefault();
   }
 
   emitReset() {
+    this.resetToDefault();
     this.observableExecutor().resetSubscriptions();
+  }
+
+  resetToDefault() {
+    this.emitDisabled.set(false);
+    this.nextStepDisabled.set(true);
+    this.runAllDisabled.set(true);
+    this.resetDisabled.set(true);
   }
 }

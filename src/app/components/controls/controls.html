@@ -4,6 +4,7 @@
     <div
       class="active d-flex justify-content-center gap-1 py-1 align-items-center border-box-light"
       (click)="emitValue()"
+      [class.disabled]="this.executorService.emitDisabled()"
     >
       <h6>
         <mat-icon class="button-icon"> play_arrow </mat-icon>
@@ -13,6 +14,7 @@
     <div
       class="inactive d-flex justify-content-center elements-bcg gap-1 py-1 align-items-center border-box"
       (click)="emitStep()"
+      [class.disabled]="this.executorService.nextStepDisabled()"
     >
       <p>
         <mat-icon class="button-icon"> skip_next </mat-icon>
@@ -22,6 +24,7 @@
     <div
       class="inactive d-flex justify-content-center elements-bcg gap-1 py-1 align-items-center border-box"
       (click)="runAll()"
+      [class.disabled]="this.executorService.runAllDisabled()"
     >
       <p>
         <mat-icon class="button-icon"> fast_forward </mat-icon>
@@ -31,6 +34,7 @@
     <div
       class="inactive d-flex justify-content-center elements-bcg gap-1 py-1 align-items-center border-box"
       (click)="reset()"
+      [class.disabled]="this.executorService.resetDisabled()"
     >
       <p>
         <mat-icon class="button-icon reset"> refresh </mat-icon>
