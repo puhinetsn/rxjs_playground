@@ -27,6 +27,7 @@ export enum OperatorName {
   StartWith = 'startWith',
   DefaultIfEmpty = 'defaultIfEmpty',
   Scan = 'scan',
+  Tap = 'tap',
   SwitchScan = 'switchScan',
   MergeScan = 'mergeScan',
   Reduce = 'reduce',
@@ -334,6 +335,11 @@ export const UTILITY = [
     name: OperatorName.ToArray,
     description: 'Buffers all values and emits them as one array on complete.',
     disabled: true,
+  },
+  {
+    name: OperatorName.Tap,
+    description: 'Performs a side effect for each emission without changing it.',
+    disabled: false,
   },
 ];
 

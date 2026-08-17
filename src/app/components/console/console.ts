@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ExecutorService } from '../../services/executor-service';
 
 @Component({
   selector: 'app-console',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './console.html',
   styleUrl: './console.scss',
 })
-export class Console {}
+export class Console {
+  executorService = inject(ExecutorService);
+}
